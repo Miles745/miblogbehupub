@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on BD电机控制</title>
+    <link>https://Miles745.github.io/miblogbehupub/categories/</link>
+    <description>Recent content in Categories on BD电机控制</description>
+    <generator>Hugo</generator>
+    <language>zh</language>
+    <managingEditor>youremail@domain.com (Some Person)</managingEditor>
+    <webMaster>youremail@domain.com (Some Person)</webMaster>
+    <lastBuildDate>Sun, 15 Feb 2026 16:31:20 +0800</lastBuildDate>
+    <atom:link href="https://Miles745.github.io/miblogbehupub/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tech</title>
+      <link>https://Miles745.github.io/miblogbehupub/categories/tech/</link>
+      <pubDate>Sun, 15 Feb 2026 16:31:20 +0800</pubDate><author>youremail@domain.com (Some Person)</author>
+      <guid>https://Miles745.github.io/miblogbehupub/categories/tech/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

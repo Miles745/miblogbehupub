@@ -1,0 +1,995 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+ 
+
+
+      <title>PMSM为什么在Free Wheeling时扭矩先增后减 - </title>
+
+  <meta name="description" content="
+场景：永磁同步电机（PMSM）在高速旋转时从正常控制（PWM/FOC）切到 free-wheeling / coast（停止主动调制，功率器件不再主动导通）。担忧点是反电势导致母线电容被回灌，引发过压；同时观察到制动（负）扭矩在高速段可能 先上升后下降。
+
+
+1. Free-wheeling 时为什么仍然会有扭矩
+即使停止主动控制，逆变器仍然存在：
+
+
+三相桥的 体二极管（或反并联二极管）
+母线电容（DC-link capacitor）
+以及器件/走线的寄生电阻、电感
+
+当电机作为发电机产生的反电动势足够高时，二极管会形成 被动整流 通路，把能量从机械侧送回直流母线：
+
+有回灌电流 → 有电磁功率 $P$（机械 → 电气）
+有功率交换 → 有电磁制动扭矩 $T = P/\omega$
+
+只有在“真正开路且没有任何可导通/容性回路”（几乎不符合实际逆变器硬件）时，电流无法形成，电磁扭矩才会接近 0。
+
+2. 回灌开始的阈值（为什么到某速度才开始出现明显制动）
+反电势大小随转速近似线性：
+
+相电压或线电压的反电势幅值 $\propto \omega$
+
+当发电侧的“等效可整流直流电压”超过当前母线电压（加上器件压降/裕量）时，二极管开始导通并回灌。
+常用近似（忽略压降）：三相正弦电压经六脉波整流的平均直流电压
+$$
+V_{rect} \approx 1.35, V_{LL,rms}
+$$
+阈值条件（开始显著回灌）：
+$$
+V_{rect} \gtrsim V_{dc}
+$$
+因此
+$$
+V_{LL,rms} \gtrsim \frac{V_{dc}}{1.35}
+$$
+把 $V_{LL,rms}$ 与 $k_e$ 的定义对应起来即可得到 $\omega_{th}$（不同厂家 $k_e$ 定义不同，需先统一单位）。
+
+3. “制动扭矩先上升后下降”的统一解释（DCM → CCM → 受限区）
+实际波形通常可分为两个阶段：">
+  <meta name="author" content="Some Person"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "BD电机控制",
+    
+    "url": "https:\/\/Miles745.github.io\/miblogbehupub\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/Miles745.github.io\/miblogbehupub\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/Miles745.github.io\/miblogbehupub\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/Miles745.github.io\/miblogbehupub\/posts\/pmsm%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8free-wheeling%E6%97%B6%E6%89%AD%E7%9F%A9%E5%85%88%E5%A2%9E%E5%90%8E%E5%87%8F\/",
+          "name": "Pmsm为什么在 free wheeling时扭矩先增后减"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Some Person"
+  },
+  "headline": "PMSM为什么在Free Wheeling时扭矩先增后减",
+  "description" : " 场景：永磁同步电机（PMSM）在高速旋转时从正常控制（PWM\/FOC）切到 free-wheeling \/ coast（停止主动调制，功率器件不再主动导通）。担忧点是反电势导致母线电容被回灌，引发过压；同时观察到制动（负）扭矩在高速段可能 先上升后下降。 1. Free-wheeling 时为什么仍然会有扭矩 即使停止主动控制，逆变器仍然存在：\n三相桥的 体二极管（或反并联二极管） 母线电容（DC-link capacitor） 以及器件\/走线的寄生电阻、电感 当电机作为发电机产生的反电动势足够高时，二极管会形成 被动整流 通路，把能量从机械侧送回直流母线：\n有回灌电流 → 有电磁功率 $P$（机械 → 电气） 有功率交换 → 有电磁制动扭矩 $T = P\/\\omega$ 只有在“真正开路且没有任何可导通\/容性回路”（几乎不符合实际逆变器硬件）时，电流无法形成，电磁扭矩才会接近 0。\n2. 回灌开始的阈值（为什么到某速度才开始出现明显制动） 反电势大小随转速近似线性：\n相电压或线电压的反电势幅值 $\\propto \\omega$ 当发电侧的“等效可整流直流电压”超过当前母线电压（加上器件压降\/裕量）时，二极管开始导通并回灌。\n常用近似（忽略压降）：三相正弦电压经六脉波整流的平均直流电压\n$$ V_{rect} \\approx 1.35, V_{LL,rms} $$\n阈值条件（开始显著回灌）：\n$$ V_{rect} \\gtrsim V_{dc} $$\n因此\n$$ V_{LL,rms} \\gtrsim \\frac{V_{dc}}{1.35} $$\n把 $V_{LL,rms}$ 与 $k_e$ 的定义对应起来即可得到 $\\omega_{th}$（不同厂家 $k_e$ 定义不同，需先统一单位）。\n3. “制动扭矩先上升后下降”的统一解释（DCM → CCM → 受限区） 实际波形通常可分为两个阶段：\n",
+  "inLanguage" : "zh",
+  "wordCount":  286 ,
+  "datePublished" : "2026-02-15T16:31:20\u002b08:00",
+  "dateModified" : "2026-02-15T16:31:20\u002b08:00",
+  "image" : "https:\/\/Miles745.github.io\/miblogbehupub\/img\/avatar-icon.png",
+  "keywords" : [ "pmsm, tech" ],
+  "mainEntityOfPage" : "https:\/\/Miles745.github.io\/miblogbehupub\/posts\/pmsm%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8free-wheeling%E6%97%B6%E6%89%AD%E7%9F%A9%E5%85%88%E5%A2%9E%E5%90%8E%E5%87%8F\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/Miles745.github.io\/miblogbehupub\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/Miles745.github.io\/miblogbehupub\/img\/avatar-icon.png",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+
+<meta property="og:title" content="PMSM为什么在Free Wheeling时扭矩先增后减" />
+<meta property="og:description" content="
+场景：永磁同步电机（PMSM）在高速旋转时从正常控制（PWM/FOC）切到 free-wheeling / coast（停止主动调制，功率器件不再主动导通）。担忧点是反电势导致母线电容被回灌，引发过压；同时观察到制动（负）扭矩在高速段可能 先上升后下降。
+
+
+1. Free-wheeling 时为什么仍然会有扭矩
+即使停止主动控制，逆变器仍然存在：
+
+
+三相桥的 体二极管（或反并联二极管）
+母线电容（DC-link capacitor）
+以及器件/走线的寄生电阻、电感
+
+当电机作为发电机产生的反电动势足够高时，二极管会形成 被动整流 通路，把能量从机械侧送回直流母线：
+
+有回灌电流 → 有电磁功率 $P$（机械 → 电气）
+有功率交换 → 有电磁制动扭矩 $T = P/\omega$
+
+只有在“真正开路且没有任何可导通/容性回路”（几乎不符合实际逆变器硬件）时，电流无法形成，电磁扭矩才会接近 0。
+
+2. 回灌开始的阈值（为什么到某速度才开始出现明显制动）
+反电势大小随转速近似线性：
+
+相电压或线电压的反电势幅值 $\propto \omega$
+
+当发电侧的“等效可整流直流电压”超过当前母线电压（加上器件压降/裕量）时，二极管开始导通并回灌。
+常用近似（忽略压降）：三相正弦电压经六脉波整流的平均直流电压
+$$
+V_{rect} \approx 1.35, V_{LL,rms}
+$$
+阈值条件（开始显著回灌）：
+$$
+V_{rect} \gtrsim V_{dc}
+$$
+因此
+$$
+V_{LL,rms} \gtrsim \frac{V_{dc}}{1.35}
+$$
+把 $V_{LL,rms}$ 与 $k_e$ 的定义对应起来即可得到 $\omega_{th}$（不同厂家 $k_e$ 定义不同，需先统一单位）。
+
+3. “制动扭矩先上升后下降”的统一解释（DCM → CCM → 受限区）
+实际波形通常可分为两个阶段：">
+<meta property="og:image" content="https://Miles745.github.io/miblogbehupub/img/avatar-icon.png" />
+<meta property="og:url" content="https://Miles745.github.io/miblogbehupub/posts/pmsm%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8free-wheeling%E6%97%B6%E6%89%AD%E7%9F%A9%E5%85%88%E5%A2%9E%E5%90%8E%E5%87%8F/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="BD电机控制" />
+
+  <meta name="twitter:title" content="PMSM为什么在Free Wheeling时扭矩先增后减" />
+  <meta name="twitter:description" content="
+场景：永磁同步电机（PMSM）在高速旋转时从正常控制（PWM/FOC）切到 free-wheeling / coast（停止主动调制，功率器件不再主动导通）。担忧点是反电势导致母线电容被回灌，引发过压；同时观察到制动（负）扭矩在高速段可能 先上升后下降。
+
+
+1. Free-wheeling 时为什么仍然会有扭矩
+即使停止主动控制，逆变器仍然存在：
+
+
+三相桥的 体二极管（或反并联二极管）
+母线 …">
+  <meta name="twitter:image" content="https://Miles745.github.io/miblogbehupub/img/avatar-icon.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@username" />
+  <meta name="twitter:creator" content="@username" />
+  <link href='https://Miles745.github.io/miblogbehupub/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta name="generator" content="Hugo 0.155.3">
+  <link rel="alternate" href="https://Miles745.github.io/miblogbehupub/index.xml" type="application/rss+xml" title="BD电机控制"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v7.0.1/css/brands.css" integrity="sha384-+eXGm6TmVoCZR1gX03US+L++L2mJIfOvp2X0+luTuEktXaF5F+e3zn0sO0HBvOyT" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v7.0.1/css/fontawesome.css" integrity="sha384-B5nyPZa7e84uCJEYHtevCdVYtQosWsbDSRtq3cy/jeSVtQW05GL8CKXO7waXsjPK" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v7.0.1/css/regular.css" integrity="sha384-V71z/A/p/DGaZAryHhiSXRQj8HdQmK2nBgL2bX23MGD+h6ZKpyxOO76f5eSXmIaj" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v7.0.1/css/solid.css" integrity="sha384-1IIShlrK5iYgvS7OAgIH3prz4RAFP7hHZ2MaLIb9l3+trFwwnw/NdCWcUHlymZDU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v7.0.1/css/svg.css" integrity="sha384-iBa7uugTOHXqQ2ngvDYJyKrPPQbd9n2P3EQe+o/0+HZe5TNvV+LO5X0lLLUrXLHP" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v7.0.1/css/svg-with-js.css" integrity="sha384-STWnS5AGz6M2YxsnGAd536EqcE2y+ktGovMMuhtXLsCBtl7lujeQj2eN4eDxa57x" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v7.0.1/css/v4-font-face.css" integrity="sha384-fH83IkgQi7kturzlxpXfNdsR8aUOcqj5HUORRVnSvJgObZkIw6aqKAaQx20IWyB/" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v7.0.1/css/v4-shims.css" integrity="sha384-cCODJHSivNBsaHei/8LC0HUD58kToSbDU+xT7Rs51BO1v/IvgT/uM0W6xMoUqKfn" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v7.0.1/css/v5-font-face.css" integrity="sha384-atSdF89mIn15dv+o2LKkDM6mCh3hwh6A7mwZ6F2it/kenqZbMu+QW/ye1OG4XSWV" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"><link rel="stylesheet" href="https://Miles745.github.io/miblogbehupub/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://Miles745.github.io/miblogbehupub/css/highlight.min.css" /><link rel="stylesheet" href="https://Miles745.github.io/miblogbehupub/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://Miles745.github.io/miblogbehupub/">BD电机控制</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/miblogbehupub/">Blog</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" role="button" tabindex="0">Samples</a>
+              <div class="navlinks-children">
+                
+                  <a href="/miblogbehupub/post/2017-03-07-bigimg-sample">Big Image Sample</a>
+                
+                  <a href="/miblogbehupub/post/2017-03-05-math-sample">Math Sample</a>
+                
+                  <a href="/miblogbehupub/post/2016-03-08-code-sample">Code Sample</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/miblogbehupub/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/miblogbehupub/tags">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="BD电机控制" href="https://Miles745.github.io/miblogbehupub/">
+            <img class="avatar-img" src="https://Miles745.github.io/miblogbehupub/img/avatar-icon.png" alt="BD电机控制" />
+           
+          </a>
+        </div>
+      </div>
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>PMSM为什么在Free Wheeling时扭矩先增后减</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <blockquote>
+<p>场景：永磁同步电机（PMSM）在高速旋转时从正常控制（PWM/FOC）切到 <strong>free-wheeling / coast</strong>（停止主动调制，功率器件不再主动导通）。担忧点是反电势导致母线电容被回灌，引发过压；同时观察到制动（负）扭矩在高速段可能 <strong>先上升后下降</strong>。
+<img src="/img/PMSM%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8FreeWheeling%E6%97%B6%E6%89%AD%E7%9F%A9%E5%85%88%E5%A2%9E%E5%90%8E%E5%87%8F/SpdTrq6SO.png" alt="alt text"></p>
+</blockquote>
+<h3 id="1-free-wheeling-时为什么仍然会有扭矩">1. Free-wheeling 时为什么仍然会有扭矩</h3>
+<p>即使停止主动控制，逆变器仍然存在：</p>
+<p><img src="/img/PMSM%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8FreeWheeling%E6%97%B6%E6%89%AD%E7%9F%A9%E5%85%88%E5%A2%9E%E5%90%8E%E5%87%8F/6SO.png" alt="alt text"></p>
+<ul>
+<li>三相桥的 <strong>体二极管</strong>（或反并联二极管）</li>
+<li>母线电容（DC-link capacitor）</li>
+<li>以及器件/走线的寄生电阻、电感</li>
+</ul>
+<p>当电机作为发电机产生的反电动势足够高时，二极管会形成 <strong>被动整流</strong> 通路，把能量从机械侧送回直流母线：</p>
+<ul>
+<li>有回灌电流 → 有电磁功率 $P$（机械 → 电气）</li>
+<li>有功率交换 → 有电磁制动扭矩 $T = P/\omega$</li>
+</ul>
+<p>只有在“真正开路且没有任何可导通/容性回路”（几乎不符合实际逆变器硬件）时，电流无法形成，电磁扭矩才会接近 0。</p>
+<hr>
+<h3 id="2-回灌开始的阈值为什么到某速度才开始出现明显制动">2. 回灌开始的阈值（为什么到某速度才开始出现明显制动）</h3>
+<p>反电势大小随转速近似线性：</p>
+<ul>
+<li>相电压或线电压的反电势幅值 $\propto \omega$</li>
+</ul>
+<p>当发电侧的“等效可整流直流电压”超过当前母线电压（加上器件压降/裕量）时，二极管开始导通并回灌。</p>
+<p>常用近似（忽略压降）：三相正弦电压经六脉波整流的平均直流电压</p>
+<p>$$
+V_{rect} \approx 1.35, V_{LL,rms}
+$$</p>
+<p>阈值条件（开始显著回灌）：</p>
+<p>$$
+V_{rect} \gtrsim V_{dc}
+$$</p>
+<p>因此</p>
+<p>$$
+V_{LL,rms} \gtrsim \frac{V_{dc}}{1.35}
+$$</p>
+<p>把 $V_{LL,rms}$ 与 $k_e$ 的定义对应起来即可得到 $\omega_{th}$（不同厂家 $k_e$ 定义不同，需先统一单位）。</p>
+<hr>
+<h3 id="3-制动扭矩先上升后下降的统一解释dcm--ccm--受限区">3. “制动扭矩先上升后下降”的统一解释（DCM → CCM → 受限区）</h3>
+<p>实际波形通常可分为两个阶段：</p>
+<h4 id="31-阶段-a电流断续导通dcm扭矩随速度上升而上升">3.1 阶段 A：电流断续导通（DCM）——扭矩随速度上升而上升</h4>
+<p>刚超过阈值时：</p>
+<ul>
+<li>反电势只在波形峰值附近略高于 $V_{dc}$</li>
+<li>二极管只在小段时间内导通</li>
+<li>三相电流呈 <strong>脉冲/断续</strong>（“充一下—断一下”）</li>
+</ul>
+<p>随着速度进一步升高：</p>
+<ul>
+<li>反电势幅值增大 $E \propto \omega$</li>
+<li>超过 $V_{dc}$ 的时间（导通角）变长</li>
+<li>脉冲电流的峰值与平均值上升</li>
+</ul>
+<p>→ 平均回灌功率上升 → 制动扭矩增大。</p>
+<p>这对应“到某速度附近负扭矩突然出现并快速变大”。</p>
+<h4 id="32-阶段-b电流连续导通ccm后进入受限区扭矩开始下降">3.2 阶段 B：电流连续导通（CCM）后进入“受限区”——扭矩开始下降</h4>
+<p>当速度更高时，二极管导通几乎不再中断，进入 <strong>连续电流</strong>。但此时扭矩不一定继续增大，因为会出现越来越强的限制，使<strong>能产生有功功率的成分增长不起来</strong>：</p>
+<h4 id="1-电感电抗随频率上升电流幅值趋于特征电流">(1) 电感电抗随频率上升，电流幅值趋于“特征电流”</h4>
+<p>电气频率 $\omega_e \propto \omega$，绕组电抗</p>
+<p>$$
+X_L = \omega_e L
+$$</p>
+<p>在高频极限，电流被电感限制，量级趋近</p>
+<p>$$
+I \sim \frac{E}{X_L} \approx \frac{k_e\omega}{\omega L} = \frac{k_e}{L} \quad (\text{近似趋于常数})
+$$</p>
+<p>这也常被表述为“高速段电流幅值趋于电机特征电流”。</p>
+<h4 id="2-扭矩-t--pomega即便功率不再增长扭矩也会被-1omega-拉低">(2) 扭矩 $T = P/\omega$：即便功率不再增长，扭矩也会被 $1/\omega$ 拉低</h4>
+<p>若母线是“硬母线”（电池/电源/制动斩波器能吸收能量，使 $V_{dc}$ 近似恒定）：</p>
+<ul>
+<li>回灌功率可近似 $P \approx V_{dc} I_{dc}$</li>
+<li>一旦 $I_{dc}$ 受限而趋于平台，$P$ 也趋于平台</li>
+</ul>
+<p>则</p>
+<p>$$
+T = \frac{P}{\omega} \approx \frac{\text{常数}}{\omega} \to 0 \quad (\omega\to\infty)
+$$</p>
+<p>所以连续导通后，扭矩出现峰值并转为下降是很常见的。</p>
+<h4 id="3-若母线只能靠电容吸能无回馈无制动电阻下降会更早且伴随过压风险">(3) 若母线只能靠电容吸能（无回馈/无制动电阻），下降会更早且伴随过压风险</h4>
+<p>回灌会抬升 $V_{dc}$：</p>
+<ul>
+<li>$V_{dc}$ 升高 → “$V_{rect}$ 超过 $V_{dc}$ 的余量”变小</li>
+<li>导通角缩短/电流驱动电压差减小</li>
+</ul>
+<p>→ 回灌电流更快变小 → 制动扭矩下降更明显，同时更易过压。</p>
+<hr>
+<h3 id="4-与别人解释的一致性dcmccm-只是更细的分段">4. 与“别人解释”的一致性：DCM/CCM 只是更细的分段</h3>
+<p>常见资料会说：</p>
+<ol>
+<li>低速：反电势不足，不导通 → 无明显电流/能量交换</li>
+<li>中速：反电势略高于母线，二极管断续导通（DCM） → 平均电流随速度增大</li>
+<li>更高速：电流转为连续（CCM），随后电流幅值变化变慢甚至趋于常数 → 扭矩先增大后减小</li>
+</ol>
+<p>这与“母线钳位 + 电感限流 + $T=P/\omega$”的解释是同一物理过程的不同表述。</p>
+<hr>
+<h3 id="5-过压风险与母线电压上升的估算用于工程评估">5. 过压风险与母线电压上升的估算（用于工程评估）</h3>
+<blockquote>
+<p>仅用 $k_e, k_t, V_{dc}, C$ 不能唯一确定过压幅度，还需惯量 $J$、速度变化（或回灌电流/持续时间）、以及能量去向（电源是否吸收/是否有制动电阻）。</p>
+</blockquote>
+<h4 id="51-保守上界转动动能按比例充入母线电容">5.1 保守上界：转动动能（按比例）充入母线电容</h4>
+<p>机械能变化：</p>
+<p>$$
+\Delta E_{mech}=\frac{1}{2}J(\omega_0^2-\omega_1^2)
+$$</p>
+<p>假设其中比例 $\eta$（0~1）进入电容：</p>
+<p>$$
+\frac{1}{2}C(V_2^2-V_1^2)=\eta\Delta E_{mech}
+$$</p>
+<p>得到</p>
+<p>$$
+V_2=\sqrt{V_1^2+\frac{\eta J(\omega_0^2-\omega_1^2)}{C}},\quad \Delta V=V_2-V_1
+$$</p>
+<ul>
+<li>取 $\eta=1$ 得到最坏情况上界。</li>
+</ul>
+<h4 id="52-电流法用回灌电流积分估算">5.2 电流法：用回灌电流积分估算</h4>
+<p>若能估到/测到回灌直流电流 $I_{dc}(t)$：</p>
+<p>$$
+\Delta V \approx \frac{1}{C}\int I_{dc}(t),dt
+$$</p>
+<p>更贴近瞬态评估，但需要电流曲线或限流模型。</p>
+<hr>
+<h3 id="6-工程防护建议母线过压与失控再生">6. 工程防护建议（母线过压与失控再生）</h3>
+<ul>
+<li><strong>制动斩波器 + 制动电阻</strong>：母线超限时快速耗散回灌能量（最常用、最直接）。</li>
+<li><strong>允许能量回馈的前端</strong>：把能量回送到电池/电网，而不是只靠电容承受。</li>
+<li><strong>软切换策略</strong>：从有源控制切到 free-wheeling 前先把 $i_q$ 收敛到 0，并控制过渡，减少回灌冲击。</li>
+<li><strong>过压策略联动</strong>：检测 $V_{dc}$ 上升趋势提前开斩波/限速，而不是等到硬件保护动作。</li>
+<li><strong>容量/耐压复核</strong>：提升 $C$ 或耐压仅能缓冲，不能替代能量释放通道。</li>
+</ul>
+<hr>
+<h3 id="7-需要哪些参数才能把拐点与过压算到数值">7. 需要哪些参数才能把拐点与过压“算到数值”</h3>
+<p>若要进一步计算：</p>
+<ul>
+<li>阈值速度 $\omega_{th}$：需要明确 $k_e$ 的单位/定义（相峰值、线 RMS、Vrms/krpm 等）</li>
+<li>母线电压上升量：至少还需要 $J$、$\omega_0\to\omega_1$ 或 $I_{dc}(t)$ / 回灌持续时间、以及母线是否“硬”（电池/电源可吸收）</li>
+<li>扭矩峰值位置：需要 $R, L, p$（极对数）以及母线吸能能力（电容/电池/制动电阻）</li>
+</ul>
+<hr>
+<h3 id="快速结论">快速结论</h3>
+<ul>
+<li><strong>有扭矩</strong>：只要存在二极管/电容等回路，就会出现再生电流与制动扭矩。</li>
+<li><strong>先增后减</strong>：阈值后 DCM 导通角扩大 → 扭矩上升；更高速电感限流 + $T=P/\omega$ → 扭矩下降并趋近 0。</li>
+<li><strong>过压风险</strong>：母线只能靠电容吸能时最严重，应配置制动斩波/可回馈前端或软切换策略。</li>
+</ul>
+
+
+        
+          <div class="blog-tags">
+            
+              
+              <a href="https://Miles745.github.io/miblogbehupub/tags/pmsm/">pmsm</a>&nbsp;
+            
+              
+              <a href="https://Miles745.github.io/miblogbehupub/tags/tech/">tech</a>&nbsp;
+            
+          </div>
+        
+
+        
+            <hr/>
+            <section id="social-share">
+              <div class="list-inline footer-links">
+                
+
+<div class="share-box" aria-hidden="true">
+    <ul class="share">
+      
+      <li>
+        <a href="//twitter.com/share?url=https%3a%2f%2fMiles745.github.io%2fmiblogbehupub%2fposts%2fpmsm%25E4%25B8%25BA%25E4%25BB%2580%25E4%25B9%2588%25E5%259C%25A8free-wheeling%25E6%2597%25B6%25E6%2589%25AD%25E7%259F%25A9%25E5%2585%2588%25E5%25A2%259E%25E5%2590%258E%25E5%2587%258F%2f&amp;text=PMSM%e4%b8%ba%e4%bb%80%e4%b9%88%e5%9c%a8Free%20Wheeling%e6%97%b6%e6%89%ad%e7%9f%a9%e5%85%88%e5%a2%9e%e5%90%8e%e5%87%8f&amp;via=username" target="_blank" title="Share on Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fMiles745.github.io%2fmiblogbehupub%2fposts%2fpmsm%25E4%25B8%25BA%25E4%25BB%2580%25E4%25B9%2588%25E5%259C%25A8free-wheeling%25E6%2597%25B6%25E6%2589%25AD%25E7%259F%25A9%25E5%2585%2588%25E5%25A2%259E%25E5%2590%258E%25E5%2587%258F%2f" target="_blank" title="Share on Facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//reddit.com/submit?url=https%3a%2f%2fMiles745.github.io%2fmiblogbehupub%2fposts%2fpmsm%25E4%25B8%25BA%25E4%25BB%2580%25E4%25B9%2588%25E5%259C%25A8free-wheeling%25E6%2597%25B6%25E6%2589%25AD%25E7%259F%25A9%25E5%2585%2588%25E5%25A2%259E%25E5%2590%258E%25E5%2587%258F%2f&amp;title=PMSM%e4%b8%ba%e4%bb%80%e4%b9%88%e5%9c%a8Free%20Wheeling%e6%97%b6%e6%89%ad%e7%9f%a9%e5%85%88%e5%a2%9e%e5%90%8e%e5%87%8f" target="_blank" title="Share on Reddit">
+          <i class="fab fa-reddit"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fMiles745.github.io%2fmiblogbehupub%2fposts%2fpmsm%25E4%25B8%25BA%25E4%25BB%2580%25E4%25B9%2588%25E5%259C%25A8free-wheeling%25E6%2597%25B6%25E6%2589%25AD%25E7%259F%25A9%25E5%2585%2588%25E5%25A2%259E%25E5%2590%258E%25E5%2587%258F%2f&amp;title=PMSM%e4%b8%ba%e4%bb%80%e4%b9%88%e5%9c%a8Free%20Wheeling%e6%97%b6%e6%89%ad%e7%9f%a9%e5%85%88%e5%a2%9e%e5%90%8e%e5%87%8f" target="_blank" title="Share on LinkedIn">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fMiles745.github.io%2fmiblogbehupub%2fposts%2fpmsm%25E4%25B8%25BA%25E4%25BB%2580%25E4%25B9%2588%25E5%259C%25A8free-wheeling%25E6%2597%25B6%25E6%2589%25AD%25E7%259F%25A9%25E5%2585%2588%25E5%25A2%259E%25E5%2590%258E%25E5%2587%258F%2f&amp;title=PMSM%e4%b8%ba%e4%bb%80%e4%b9%88%e5%9c%a8Free%20Wheeling%e6%97%b6%e6%89%ad%e7%9f%a9%e5%85%88%e5%a2%9e%e5%90%8e%e5%87%8f" target="_blank" title="Share on StumbleUpon">
+          <i class="fab fa-stumbleupon"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fMiles745.github.io%2fmiblogbehupub%2fposts%2fpmsm%25E4%25B8%25BA%25E4%25BB%2580%25E4%25B9%2588%25E5%259C%25A8free-wheeling%25E6%2597%25B6%25E6%2589%25AD%25E7%259F%25A9%25E5%2585%2588%25E5%25A2%259E%25E5%2590%258E%25E5%2587%258F%2f&amp;description=PMSM%e4%b8%ba%e4%bb%80%e4%b9%88%e5%9c%a8Free%20Wheeling%e6%97%b6%e6%89%ad%e7%9f%a9%e5%85%88%e5%a2%9e%e5%90%8e%e5%87%8f" target="_blank" title="Share on Pinterest">
+          <i class="fab fa-pinterest"></i>
+        </a>
+      </li>
+
+      
+      <li>
+        <a href="mailto:?body=https%3a%2f%2fMiles745.github.io%2fmiblogbehupub%2fposts%2fpmsm%25E4%25B8%25BA%25E4%25BB%2580%25E4%25B9%2588%25E5%259C%25A8free-wheeling%25E6%2597%25B6%25E6%2589%25AD%25E7%259F%25A9%25E5%2585%2588%25E5%25A2%259E%25E5%2590%258E%25E5%2587%258F%2f&amp;subject=PMSM%e4%b8%ba%e4%bb%80%e4%b9%88%e5%9c%a8Free%20Wheeling%e6%97%b6%e6%89%ad%e7%9f%a9%e5%85%88%e5%a2%9e%e5%90%8e%e5%87%8f" title="Share via email">
+          <i class="fab fa-at"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+
+              </div>
+            </section>
+        
+
+        
+          
+
+          
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://Miles745.github.io/miblogbehupub/posts/second/" data-toggle="tooltip" data-placement="top" title="Second">&larr; </a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+      
+      
+      
+      
+        
+      
+
+    </div>
+  </div>
+</div>
+
+      <footer>
+  <div class="container">
+    
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+		
+		  <a href="mailto:youremail@domain.com" title="Email me">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://www.facebook.com/username" title="Facebook">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://github.com/username" title="GitHub">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://gitlab.com/username" title="GitLab">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://bitbucket.org/username" title="Bitbucket">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://twitter.com/username" title="Twitter">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://username.slack.com/" title="Slack">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-slack fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://reddit.com/u/username" title="Reddit">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-reddit-alien fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://linkedin.com/in/username" title="LinkedIn">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://www.xing.com/profile/username" title="Xing">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-xing fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://stackoverflow.com/users/XXXXXXX/username" title="StackOverflow">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://www.snapchat.com/add/username" title="Snapchat">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-snapchat-ghost fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://www.instagram.com/username" title="Instagram">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://www.youtube.com/user/username" title="Youtube">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://soundcloud.com/username" title="SoundCloud">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-soundcloud fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://open.spotify.com/user/username" title="Spotify">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-spotify fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://username.bandcamp.com/" title="Bandcamp">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-bandcamp fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://itch.io/profile/username" title="Itch.io">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fas fa-gamepad fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://vk.com/username" title="VK">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-vk fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://paypal.me/username" title="PayPal">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-paypal fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://telegram.me/username" title="Telegram">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-telegram fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://500px.com/username" title="500px">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-500px fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://codepen.io/username" title="CodePen">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-codepen fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://www.kaggle.com/username" title="kaggle">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-kaggle fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a rel="me"href="https://url" title="Mastodon">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-mastodon fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://weibo.com/username" title="Weibo">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://medium.com/@username" title="Medium">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-medium fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://discord.gg/invite%20code%20%28https://discord.gg/XXXXXXX%29" title="Discord">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-discord fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://www.strava.com/athletes/userid" title="Strava">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-strava fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://www.last.fm/user/username" title="Last.fm">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-lastfm fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://bsky.app/profile/username" title="Bluesky">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-bluesky fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="yourwebsite.com">Some Person</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2026
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://Miles745.github.io/miblogbehupub/">BD电机控制</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha384-w5y/xIeYixWvfM+A1cEbmHPURnvyqmVg5eVENruEdDjcyRLUSNej7512JQGspFUr" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+<script src="https://Miles745.github.io/miblogbehupub/js/main.js"></script>
+<script src="https://Miles745.github.io/miblogbehupub/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://Miles745.github.io/miblogbehupub/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+
