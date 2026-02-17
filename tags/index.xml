@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on BD电机控制</title>
-    <link>https://Miles745.github.io/miblogbehupub/tags/</link>
+    <link>https://miles745.github.io/miblogbehupub/tags/</link>
     <description>Recent content in Tags on BD电机控制</description>
     <generator>Hugo</generator>
     <language>zh</language>
     <managingEditor>youremail@domain.com (Some Person)</managingEditor>
     <webMaster>youremail@domain.com (Some Person)</webMaster>
     <lastBuildDate>Sun, 15 Feb 2026 16:31:20 +0800</lastBuildDate>
-    <atom:link href="https://Miles745.github.io/miblogbehupub/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://miles745.github.io/miblogbehupub/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Pmsm</title>
-      <link>https://Miles745.github.io/miblogbehupub/tags/pmsm/</link>
+      <link>https://miles745.github.io/miblogbehupub/tags/pmsm/</link>
       <pubDate>Sun, 15 Feb 2026 16:31:20 +0800</pubDate><author>youremail@domain.com (Some Person)</author>
-      <guid>https://Miles745.github.io/miblogbehupub/tags/pmsm/</guid>
+      <guid>https://miles745.github.io/miblogbehupub/tags/pmsm/</guid>
       <description></description>
     </item>
     <item>
       <title>Tech</title>
-      <link>https://Miles745.github.io/miblogbehupub/tags/tech/</link>
+      <link>https://miles745.github.io/miblogbehupub/tags/tech/</link>
       <pubDate>Sun, 15 Feb 2026 16:31:20 +0800</pubDate><author>youremail@domain.com (Some Person)</author>
-      <guid>https://Miles745.github.io/miblogbehupub/tags/tech/</guid>
+      <guid>https://miles745.github.io/miblogbehupub/tags/tech/</guid>
       <description></description>
     </item>
   </channel>
