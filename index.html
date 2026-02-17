@@ -795,6 +795,47 @@ $$</p>
 
 
 
+<script>
+	
+	
+	
+	(function () {
+		function render() {
+			if (typeof renderMathInElement !== "function") return false;
+			try {
+				renderMathInElement(document.body, {
+					delimiters: [
+						{ left: "$$", right: "$$", display: true },
+						{ left: "$", right: "$", display: false },
+						{ left: "\\(", right: "\\)", display: false },
+						{ left: "\\[", right: "\\]", display: true }
+					],
+					throwOnError: false,
+					ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option"]
+				});
+				return true;
+			} catch (e) {
+				return false;
+			}
+		}
+
+		function runWhenReady() {
+			if (render()) return;
+			var tries = 0;
+			var timer = window.setInterval(function () {
+				tries++;
+				if (render() || tries > 50) window.clearInterval(timer);
+			}, 100);
+		}
+
+		if (document.readyState === "complete") {
+			runWhenReady();
+		} else {
+			window.addEventListener("load", runWhenReady);
+		}
+	})();
+</script>
+
     
   </body>
 </html>
