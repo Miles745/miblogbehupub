@@ -14,7 +14,9 @@
 
   
   <meta name="description" content="Front Page Content
-beautifulhugo supports content on your front page. Edit /content/_index.md to change what appears here. Delete /content/_index.md if you don&rsquo;t want any content here.">
+Motor Control, Without the Mysticism
+If a motor could talk, it would complain in current ripple, acoustic noise, thermal rise, and mysterious fault flags.
+This blog is where we turn those complaints into measurable signals—and then into better control algorithms.">
   <meta name="author" content="Some Person"/><script type="application/ld+json">
 {
     "@context": "http://schema.org",
@@ -38,7 +40,9 @@ beautifulhugo supports content on your front page. Edit /content/_index.md to ch
 
 <meta property="og:title" content="BD电机控制" />
 <meta property="og:description" content="Front Page Content
-beautifulhugo supports content on your front page. Edit /content/_index.md to change what appears here. Delete /content/_index.md if you don&rsquo;t want any content here.">
+Motor Control, Without the Mysticism
+If a motor could talk, it would complain in current ripple, acoustic noise, thermal rise, and mysterious fault flags.
+This blog is where we turn those complaints into measurable signals—and then into better control algorithms.">
 <meta property="og:image" content="https://Miles745.github.io/miblogbehupub/img/avatar-icon.png" />
 <meta property="og:url" content="https://Miles745.github.io/miblogbehupub/" />
 <meta property="og:type" content="website" />
@@ -46,7 +50,9 @@ beautifulhugo supports content on your front page. Edit /content/_index.md to ch
 
   <meta name="twitter:title" content="BD电机控制" />
   <meta name="twitter:description" content="Front Page Content
-beautifulhugo supports content on your front page. Edit /content/_index.md to change what appears here. Delete /content/_index.md if you don&rsquo;t want any content here.">
+Motor Control, Without the Mysticism
+If a motor could talk, it would complain in current ripple, acoustic noise, thermal rise, and mysterious fault flags.
+This blog is where we turn …">
   <meta name="twitter:image" content="https://Miles745.github.io/miblogbehupub/img/avatar-icon.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@username" />
@@ -238,7 +244,9 @@ beautifulhugo supports content on your front page. Edit /content/_index.md to ch
         
           <div class="well">
             <h2 id="front-page-content">Front Page Content</h2>
-<p><code>beautifulhugo</code> supports content on your front page. Edit <code>/content/_index.md</code> to change what appears here. Delete <code>/content/_index.md</code> if you don&rsquo;t want any content here.</p>
+<p><code>Motor Control, Without the Mysticism</code>
+If a motor could talk, it would complain in current ripple, acoustic noise, thermal rise, and mysterious fault flags.
+This blog is where we turn those complaints into measurable signals—and then into better control algorithms.</p>
 
           </div>
         
@@ -281,11 +289,11 @@ beautifulhugo supports content on your front page. Edit /content/_index.md to ch
         
         <blockquote>
 <p>场景：永磁同步电机（PMSM）在高速旋转时从正常控制（PWM/FOC）切到 <strong>free-wheeling / coast</strong>（停止主动调制，功率器件不再主动导通）。担忧点是反电势导致母线电容被回灌，引发过压；同时观察到制动（负）扭矩在高速段可能 <strong>先上升后下降</strong>。
-<img src="/img/PMSM%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8FreeWheeling%E6%97%B6%E6%89%AD%E7%9F%A9%E5%85%88%E5%A2%9E%E5%90%8E%E5%87%8F/SpdTrq6SO.png" alt="alt text"></p>
+<img src="static/img/PMSM%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8FreeWheeling%E6%97%B6%E6%89%AD%E7%9F%A9%E5%85%88%E5%A2%9E%E5%90%8E%E5%87%8F/SpdTrq6SO.png" alt="alt text"></p>
 </blockquote>
 <h3 id="1-free-wheeling-时为什么仍然会有扭矩">1. Free-wheeling 时为什么仍然会有扭矩</h3>
 <p>即使停止主动控制，逆变器仍然存在：</p>
-<p><img src="/img/PMSM%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8FreeWheeling%E6%97%B6%E6%89%AD%E7%9F%A9%E5%85%88%E5%A2%9E%E5%90%8E%E5%87%8F/6SO.png" alt="alt text"></p>
+<p><img src="static/img/PMSM%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8FreeWheeling%E6%97%B6%E6%89%AD%E7%9F%A9%E5%85%88%E5%A2%9E%E5%90%8E%E5%87%8F/6SO.png" alt="alt text"></p>
 <ul>
 <li>三相桥的 <strong>体二极管</strong>（或反并联二极管）</li>
 <li>母线电容（DC-link capacitor）</li>
@@ -297,7 +305,6 @@ beautifulhugo supports content on your front page. Edit /content/_index.md to ch
 <li>有功率交换 → 有电磁制动扭矩 $T = P/\omega$</li>
 </ul>
 <p>只有在“真正开路且没有任何可导通/容性回路”（几乎不符合实际逆变器硬件）时，电流无法形成，电磁扭矩才会接近 0。</p>
-<hr>
 <h3 id="2-回灌开始的阈值为什么到某速度才开始出现明显制动">2. 回灌开始的阈值（为什么到某速度才开始出现明显制动）</h3>
 <p>反电势大小随转速近似线性：</p>
 <ul>
@@ -317,7 +324,6 @@ $$</p>
 V_{LL,rms} \gtrsim \frac{V_{dc}}{1.35}
 $$</p>
 <p>把 $V_{LL,rms}$ 与 $k_e$ 的定义对应起来即可得到 $\omega_{th}$（不同厂家 $k_e$ 定义不同，需先统一单位）。</p>
-<hr>
 <h3 id="3-制动扭矩先上升后下降的统一解释dcm--ccm--受限区">3. “制动扭矩先上升后下降”的统一解释（DCM → CCM → 受限区）</h3>
 <p>实际波形通常可分为两个阶段：</p>
         <a href="https://Miles745.github.io/miblogbehupub/posts/pmsm%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8free-wheeling%E6%97%B6%E6%89%AD%E7%9F%A9%E5%85%88%E5%A2%9E%E5%90%8E%E5%87%8F/" class="post-read-more">[]</a>
@@ -382,550 +388,8 @@ $$</p>
 
 </article>
           
-            <article class="post-preview">
-    <a href="https://Miles745.github.io/miblogbehupub/post/2017-03-20-photoswipe-gallery-sample/">
-        <h2 class="post-title">Photoswipe Gallery Sample</h2>
-        
-        <h3 class="post-subtitle">
-            Making a Gallery
-        </h3>
-        
-        
-        
-    </a>
-
-    <p class="post-meta">
-        <span class="post-meta">
-  
-  
-  
-  <i class="fas fa-calendar"></i>&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;215&nbsp;
-  
-  
-    
-      &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Some Person
-    
-  
-  
-</span>
-
-
-    </p>
-    <div class="post-entry">
-        
-        <p>Beautiful Hugo adds a few custom shortcodes created by <a href="https://www.liwen.id.au/heg/">Li-Wen Yip</a> and <a href="https://github.com/GjjvdBurg/HugoPhotoSwipe">Gert-Jan van den Berg</a> for making galleries with <a href="https://photoswipe.com">PhotoSwipe</a> .</p>
-
-
-
-<div class="gallery caption-position-bottom caption-effect-fade hover-effect-zoom hover-transition" itemscope itemtype="http://schema.org/ImageGallery">
-	  
-  
-  <link rel="stylesheet" href="https://Miles745.github.io/miblogbehupub/css/hugo-easy-gallery.css" />
-  <div class="box" >
-    <figure  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-      <div class="img" style="background-image: url('https://Miles745.github.io/miblogbehupub//img/hexagon-thumb.jpg');">
-        <img itemprop="thumbnail" src="/img/hexagon-thumb.jpg" alt="/img/hexagon-thumb.jpg"/>
-      </div>
-      <a href="/img/hexagon.jpg" itemprop="contentUrl"></a>
-    </figure>
-  </div>
-
-  
-  
-  <div class="box" >
-    <figure  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-      <div class="img" style="background-image: url('https://Miles745.github.io/miblogbehupub//img/sphere-thumb.jpg');">
-        <img itemprop="thumbnail" src="/img/sphere-thumb.jpg" alt="Sphere"/>
-      </div>
-      <a href="/img/sphere.jpg" itemprop="contentUrl"></a>
-        <figcaption>
-            <p>Sphere</p>
-        </figcaption>
-    </figure>
-  </div>
-
-  
-  
-  <div class="box" >
-    <figure  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-      <div class="img" style="background-image: url('https://Miles745.github.io/miblogbehupub//img/triangle-thumb.jpg');">
-        <img itemprop="thumbnail" src="/img/triangle-thumb.jpg" alt="This is a long comment about a triangle"/>
-      </div>
-      <a href="/img/triangle.jpg" itemprop="contentUrl"></a>
-        <figcaption>
-            <p>Triangle</p>
-        </figcaption>
-    </figure>
-  </div>
-
-
-</div>
-        <a href="https://Miles745.github.io/miblogbehupub/post/2017-03-20-photoswipe-gallery-sample/" class="post-read-more">[]</a>
-        
-    </div>
-
-    
-    <div class="blog-tags">
-        
-       
-       <a href="https://Miles745.github.io/miblogbehupub/tags/example/">example</a>&nbsp;
-        
-       
-       <a href="https://Miles745.github.io/miblogbehupub/tags/photoswipe/">photoswipe</a>&nbsp;
-         
-    </div>
-    
-
-</article>
-          
-            <article class="post-preview">
-    <a href="https://Miles745.github.io/miblogbehupub/post/2017-03-07-bigimg-sample/">
-        <h2 class="post-title">Big Image Sample</h2>
-        
-        <h3 class="post-subtitle">
-            Using Multiple Images
-        </h3>
-        
-        
-        
-    </a>
-
-    <p class="post-meta">
-        <span class="post-meta">
-  
-  
-  
-  <i class="fas fa-calendar"></i>&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;191&nbsp;
-  
-  
-    
-      &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Some Person
-    
-  
-  
-</span>
-
-
-    </p>
-    <div class="post-entry">
-        
-        <p>The image banners at the top of the page are refered to as &ldquo;bigimg&rdquo; in this theme. They are optional, and one more more can be specified. If more than one is specified, the images rotate every 10 seconds. In the front matter, bigimgs are specified using an array of hashes.</p>
-        <a href="https://Miles745.github.io/miblogbehupub/post/2017-03-07-bigimg-sample/" class="post-read-more">[]</a>
-        
-    </div>
-
-    
-    <div class="blog-tags">
-        
-       
-       <a href="https://Miles745.github.io/miblogbehupub/tags/example/">example</a>&nbsp;
-        
-       
-       <a href="https://Miles745.github.io/miblogbehupub/tags/bigimg/">bigimg</a>&nbsp;
-         
-    </div>
-    
-
-</article>
-          
-            <article class="post-preview">
-    <a href="https://Miles745.github.io/miblogbehupub/post/2017-03-05-math-sample/">
-        <h2 class="post-title">Math Sample</h2>
-        
-        <h3 class="post-subtitle">
-            Using KaTeX
-        </h3>
-        
-        
-        
-    </a>
-
-    <p class="post-meta">
-        <span class="post-meta">
-  
-  
-  
-  <i class="fas fa-calendar"></i>&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;121&nbsp;
-  
-  
-    
-      &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Some Person
-    
-  
-  
-</span>
-
-
-    </p>
-    <div class="post-entry">
-        
-        <p>KaTeX can be used to generate complex math formulas server-side.</p>
-<p>$$
-\phi = \frac{(1+\sqrt{5})}{2} = 1.6180339887\cdots
-$$</p>
-<p>Additional details can be found on <a href="https://github.com/KaTeX/KaTeX">GitHub</a> or on the <a href="https://katex.org/">project homepage</a>.</p>
-        <a href="https://Miles745.github.io/miblogbehupub/post/2017-03-05-math-sample/" class="post-read-more">[]</a>
-        
-    </div>
-
-    
-    <div class="blog-tags">
-        
-       
-       <a href="https://Miles745.github.io/miblogbehupub/tags/example/">example</a>&nbsp;
-        
-       
-       <a href="https://Miles745.github.io/miblogbehupub/tags/math/">math</a>&nbsp;
-         
-    </div>
-    
-
-</article>
-          
-            <article class="post-preview">
-    <a href="https://Miles745.github.io/miblogbehupub/post/2016-03-08-code-sample/">
-        <h2 class="post-title">Code Sample</h2>
-        
-        <h3 class="post-subtitle">
-            Using Hugo or Pygments
-        </h3>
-        
-        
-        
-    </a>
-
-    <p class="post-meta">
-        <span class="post-meta">
-  
-  
-  
-  <i class="fas fa-calendar"></i>&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;183&nbsp;
-  
-  
-    
-      &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Some Person
-    
-  
-  
-</span>
-
-
-    </p>
-    <div class="post-entry">
-        
-        <p>The following are two code samples using syntax highlighting.</p>
-        <a href="https://Miles745.github.io/miblogbehupub/post/2016-03-08-code-sample/" class="post-read-more">[]</a>
-        
-    </div>
-
-    
-    <div class="blog-tags">
-        
-       
-       <a href="https://Miles745.github.io/miblogbehupub/tags/example/">example</a>&nbsp;
-        
-       
-       <a href="https://Miles745.github.io/miblogbehupub/tags/code/">code</a>&nbsp;
-         
-    </div>
-    
-
-</article>
-          
-            <article class="post-preview">
-    <a href="https://Miles745.github.io/miblogbehupub/post/2015-02-26-flake-it-till-you-make-it/">
-        <h2 class="post-title">Flake it till you make it</h2>
-        
-        <h3 class="post-subtitle">
-            Excerpt from Soulshaping by Jeff Brown
-        </h3>
-        
-        
-        
-    </a>
-
-    <p class="post-meta">
-        <span class="post-meta">
-  
-  
-  
-  <i class="fas fa-calendar"></i>&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;443&nbsp;
-  
-  
-    
-      &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Some Person
-    
-  
-  
-</span>
-
-
-    </p>
-    <div class="post-entry">
-        
-        <p>Under what circumstances should we step off a path? When is it essential that we finish what we start? If I bought a bag of peanuts and had an allergic reaction, no one would fault me if I threw it out. If I ended a relationship with a woman who hit me, no one would say that I had a commitment problem. But if I walk away from a seemingly secure route because my soul has other ideas, I am a flake?</p>
-        <a href="https://Miles745.github.io/miblogbehupub/post/2015-02-26-flake-it-till-you-make-it/" class="post-read-more">[]</a>
-        
-    </div>
-
-    
-
-</article>
-          
-            <article class="post-preview">
-    <a href="https://Miles745.github.io/miblogbehupub/post/2015-02-20-test-markdown/">
-        <h2 class="post-title">Test markdown</h2>
-        
-        <h3 class="post-subtitle">
-            Each post also has a subtitle
-        </h3>
-        
-        
-        
-    </a>
-
-    <p class="post-meta">
-        <span class="post-meta">
-  
-  
-  
-  <i class="fas fa-calendar"></i>&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;95&nbsp;
-  
-  
-    
-      &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Some Person
-    
-  
-  
-</span>
-
-
-    </p>
-    <div class="post-entry">
-        
-        <p>You can write regular <a href="https://markdowntutorial.com/">markdown</a> here and <a href="https://gohugo.io">Hugo</a> will automatically convert it to a nice webpage.  I strongly encourage you to <a href="https://markdowntutorial.com/">take 5 minutes to learn how to write in markdown</a> - it&rsquo;ll teach you how to transform regular text into bold/italics/headings/tables/etc.</p>
-<p><strong>Here is some bold text</strong></p>
-<h2 id="here-is-a-secondary-heading">Here is a secondary heading</h2>
-<p>Here&rsquo;s a useless table:</p>
-<table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Number</th>
-          <th style="text-align: left">Next number</th>
-          <th style="text-align: left">Previous number</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Five</td>
-          <td style="text-align: left">Six</td>
-          <td style="text-align: left">Four</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Ten</td>
-          <td style="text-align: left">Eleven</td>
-          <td style="text-align: left">Nine</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Seven</td>
-          <td style="text-align: left">Eight</td>
-          <td style="text-align: left">Six</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Two</td>
-          <td style="text-align: left">Three</td>
-          <td style="text-align: left">One</td>
-      </tr>
-  </tbody>
-</table>
-<p>How about a yummy crepe?</p>
-        <a href="https://Miles745.github.io/miblogbehupub/post/2015-02-20-test-markdown/" class="post-read-more">[]</a>
-        
-    </div>
-
-    
-    <div class="blog-tags">
-        
-       
-       <a href="https://Miles745.github.io/miblogbehupub/tags/example/">example</a>&nbsp;
-        
-       
-       <a href="https://Miles745.github.io/miblogbehupub/tags/markdown/">markdown</a>&nbsp;
-         
-    </div>
-    
-
-</article>
-          
-            <article class="post-preview">
-    <a href="https://Miles745.github.io/miblogbehupub/post/2015-02-13-hamlet-monologue/">
-        <h2 class="post-title">To be</h2>
-        
-        <h3 class="post-subtitle">
-            ... or not to be?
-        </h3>
-        
-        
-        
-    </a>
-
-    <p class="post-meta">
-        <span class="post-meta">
-  
-  
-  
-  <i class="fas fa-calendar"></i>&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;275&nbsp;
-  
-  
-    
-      &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Some Person
-    
-  
-  
-</span>
-
-
-    </p>
-    <div class="post-entry">
-        
-        <p>To be, or not to be&ndash;that is the question:
-Whether &rsquo;tis nobler in the mind to suffer
-The slings and arrows of outrageous fortune
-Or to take arms against a sea of troubles
-And by opposing end them. To die, to sleep&ndash;
-No more&ndash;and by a sleep to say we end
-The heartache, and the thousand natural shocks
-That flesh is heir to. &lsquo;Tis a consummation
-Devoutly to be wished. To die, to sleep&ndash;
-To sleep&ndash;perchance to dream: ay, there&rsquo;s the rub,
-For in that sleep of death what dreams may come
-When we have shuffled off this mortal coil,
-Must give us pause. There&rsquo;s the respect
-That makes calamity of so long life.
-For who would bear the whips and scorns of time,
-Th&rsquo; oppressor&rsquo;s wrong, the proud man&rsquo;s contumely
-The pangs of despised love, the law&rsquo;s delay,
-The insolence of office, and the spurns
-That patient merit of th&rsquo; unworthy takes,
-When he himself might his quietus make
-With a bare bodkin? Who would fardels bear,
-To grunt and sweat under a weary life,
-But that the dread of something after death,
-The undiscovered country, from whose bourn
-No traveller returns, puzzles the will,
-And makes us rather bear those ills we have
-Than fly to others that we know not of?
-Thus conscience does make cowards of us all,
-And thus the native hue of resolution
-Is sicklied o&rsquo;er with the pale cast of thought,
-And enterprise of great pitch and moment
-With this regard their currents turn awry
-And lose the name of action. &ndash; Soft you now,
-The fair Ophelia! &ndash; Nymph, in thy orisons
-Be all my sins remembered.</p>
-
-        
-    </div>
-
-    
-
-</article>
-          
-            <article class="post-preview">
-    <a href="https://Miles745.github.io/miblogbehupub/post/2015-01-27-dear-diary/">
-        <h2 class="post-title">Dear diary</h2>
-        
-        
-        
-    </a>
-
-    <p class="post-meta">
-        <span class="post-meta">
-  
-  
-  
-  <i class="fas fa-calendar"></i>&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;
-  
-  
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;78&nbsp;
-  
-  
-    
-      &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Some Person
-    
-  
-  
-</span>
-
-
-    </p>
-    <div class="post-entry">
-        
-        <p>What is it with that Mary girl?  Dragging me to school every day. As if I had a choice.  What you don&rsquo;t hear in those nursery rhymes is that she starves me if I don&rsquo;t go to school with her; it&rsquo;s the only way I can stay alive!  I&rsquo;m thinking about being adopted by Little Bo Peep, sure I may get lost, but anything is better than being with Mary and those little brats at school (shudder, shudder).</p>
-
-        
-    </div>
-
-    
-
-</article>
-          
         </div>
 
-        
-          <ul class="pager main-pager">
-            
-            
-              <li class="next">
-                <a href="https://Miles745.github.io/miblogbehupub/page/2/"> &rarr;</a>
-              </li>
-            
-          </ul>
         
       </div>
     </div>
